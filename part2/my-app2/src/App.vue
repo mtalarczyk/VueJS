@@ -33,6 +33,8 @@ export default {
 
       //products: []
       
+      // LUB:
+
       // products: [{
       //   id: 0,
       //   name: 'Coffee'
