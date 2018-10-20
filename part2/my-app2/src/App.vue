@@ -1,33 +1,26 @@
 <template>
   <div id="app">
     <h2>My awesome list</h2>
-    <ul>
-      <li v-for="p in products" :key="p.id">{{ p.name }}</li>
-    </ul>
-    <p v-if="!products.length">No products!</p>
+    <!-- 3. Then we can use component by kebab-cased name and providing :input -->
+    <product-list :products="products"></product-list>
 
-    <form @submit.prevent="onSubmit()">
-      <!--3- 1. name attribute is now required as well as v-validate with its own DSL values -->
-      <input
-        name="product"
-        v-model="newProduct.name"
-        v-validate="'required|min:3|alpha'"
-      >
-      <button>Add</button>
-      <button v-on:click="removeLast()">Remove</button>
-      <!--3- 2. errors are added by default when validation is initialized and have some useful methods -->
-      <div v-show="errors.has('product')">
-        {{ errors.first('product') }}
-      </div>
-    </form>
+    <!-- With @ we can listen to add-product event and assign onAddProduct-->
+    <add-product @add-product="onAddProduct"></add-product>
   </div>
 </template>
 
 <script>
-import uuid from 'uuid/v4';
+// 1. To use our new, shiny component we need to import it first
+import ProductList from './components/ProductList';
+import AddProduct from './components/AddProduct';
 
 export default {
   name: 'app',
+  //3/ 2. And add it to as a key called 'components'
+  components: {
+    ProductList,
+    AddProduct
+  },
   data() {
     return {
       products: [{
@@ -36,31 +29,13 @@ export default {
       }, {
         id: 1,
         name: 'Pizza'
-      }],
-      newProduct: {
-        name: ''
-      }
+      }]
     }
   },
   methods: {
-    onSubmit() {
-      // 3. On the JS side we need to use yet another injected value called $validator to validate all the fields
-      this.$validator.validateAll().then(result => {
-
-        if (!result) {
-          return;
-        }
-        this.products.push({
-          id: uuid(),
-          ...this.newProduct
-        });
-        this.newProduct.name = '';
-        // 4/ and reset validation state after adding a product
-        this.$validator.reset();
-      });
-    },
-    removeLast() {
-      this.products.pop();
+    //3/ All we have to do in a method is to add product to the list
+    onAddProduct(product) {
+      this.products.push(product);
     }
   }
 }
@@ -72,6 +47,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px; 
+  margin-top: 60px;
 }
 </style>
