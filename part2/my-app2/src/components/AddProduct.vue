@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent="onSubmit()">
     <input
-      name="product"
-      v-model="newProduct.name"
       v-validate="'required|min:3'"
+      v-model="newProduct.name"      
+      name="product"      
     >
     <button>Add</button>
     <div v-show="errors.has('product')">
@@ -48,6 +48,4 @@
   }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
